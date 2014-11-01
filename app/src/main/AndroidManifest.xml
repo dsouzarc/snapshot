@@ -20,6 +20,14 @@
             android:name=".Lobby"
             android:label="@string/title_activity_game_set_up" >
         </activity>
+        <activity
+            android:name=".LiveGame"
+            android:label="@string/title_activity_live_game" >
+        </activity>
+        <activity
+            android:name=".GameDetails"
+            android:label="@string/title_activity_game_details" >
+        </activity>
     </application>
 
 </manifest>
