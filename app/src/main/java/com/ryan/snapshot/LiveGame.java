@@ -72,6 +72,7 @@ public class LiveGame extends Activity {
         final BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(getResources(), resID, bmOptions);
+
         final int photoW = bmOptions.outWidth;
         final int photoH = bmOptions.outHeight;
         final int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
@@ -92,8 +93,10 @@ public class LiveGame extends Activity {
 
         final Canvas canvas = new Canvas(bmOverlay);
         canvas.drawBitmap(profilePhoto, new Matrix(), null);
-        canvas.drawLine(0, profilePhoto.getHeight()/2, profilePhoto.getWidth(), profilePhoto.getHeight()/2, paint);
-        canvas.drawLine(profilePhoto.getWidth()/2, 0, profilePhoto.getWidth()/2, profilePhoto.getHeight(), paint);
+        canvas.drawLine(0, profilePhoto.getHeight()/2, profilePhoto.getWidth(),
+                profilePhoto.getHeight()/2, paint);
+        canvas.drawLine(profilePhoto.getWidth()/2, 0, profilePhoto.getWidth()/2,
+                profilePhoto.getHeight(), paint);
         return bmOverlay;
     }
 
