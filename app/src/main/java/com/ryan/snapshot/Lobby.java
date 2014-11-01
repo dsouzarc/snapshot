@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.content.Intent;
+import android.view.View;
 
 public class Lobby extends Activity {
 
@@ -11,7 +14,18 @@ public class Lobby extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
+
+        final Button buttonToLiveGame = (Button) findViewById(R.id.buttonLiveGame);
+        buttonToLiveGame.setOnClickListener(liveGameListener);
     }
+
+    private final View.OnClickListener liveGameListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final Intent toLiveGame = new Intent(Lobby.this, LiveGame.class);
+            startActivity(toLiveGame);
+        }
+    };
 
 
     @Override

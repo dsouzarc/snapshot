@@ -16,15 +16,16 @@ public class LoginScreen extends Activity {
         setContentView(R.layout.activity_login_screen);
 
         final Button login = (Button) findViewById(R.id.loginButton);
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent toLobby = new Intent(LoginScreen.this, Lobby.class);
-                startActivity(toLobby);
-            }
-        });
+        login.setOnClickListener(loginListener);
     }
+
+    private final View.OnClickListener loginListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final Intent toLobby = new Intent(LoginScreen.this, Lobby.class);
+            startActivity(toLobby);
+        }
+    };
 
 
     @Override
