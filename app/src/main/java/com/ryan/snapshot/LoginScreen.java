@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.content.Intent;
 import android.view.View;
+import com.parse.Parse;
 
 public class LoginScreen extends Activity {
 
