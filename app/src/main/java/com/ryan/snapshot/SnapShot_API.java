@@ -1,7 +1,15 @@
 package com.ryan.snapshot;
 
 /**
- * Created by Ryan on 10/31/14.
+ * Singleton API 
  */
 public class SnapShot_API {
+    private static final SnapShot_API API = new SnapShot_API();
+
+    private SnapShot_API() {
+    }
+
+    public static SnapShot_API getApi() {
+        return API;
+    }
 }
