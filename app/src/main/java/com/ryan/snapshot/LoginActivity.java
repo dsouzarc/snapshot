@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.util.Log;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.Window;
@@ -44,6 +45,20 @@ public class LoginActivity extends Activity {
                     "gzWFegbXiTLVoLkHtqvDKPzctugOGH61",
                     this
             );
+
+            Item item = new Item();
+            item.Text = "Awesome item";
+            mClient.getTable(Item.class).insert(item, new TableOperationCallback<Item>() {
+                public void onCompleted(Item entity, Exception exception, ServiceFilterResponse response) {
+                    if (exception == null) {
+                        makeToast("SUCCESS");
+                        // Insert succeeded
+                    } else {
+                        makeToast("FAILED: " + exception.toString());
+                        // Insert failed
+                    }
+                }
+            });
         }
         catch(Exception e) {
             makeToast(e.toString());
@@ -98,6 +113,10 @@ public class LoginActivity extends Activity {
             startActivity(toLobby);
         }
     };
+
+    private void log(final String log) {
+        Log.e("com.ryan.snapshot", log);
+    }
 
     private void makeToast(final String toast) {
         Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
