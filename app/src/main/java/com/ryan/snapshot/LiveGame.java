@@ -21,6 +21,8 @@ import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.pkmmte.view.CircularImageView;
+import com.ryan.snapshot.QRCode_Reader.IntentIntegrator;
+import com.ryan.snapshot.QRCode_Reader.IntentResult;
 
 public class LiveGame extends Activity {
     private static final int PROFILE_PHOTO_SIZE = 500;
@@ -36,7 +38,8 @@ public class LiveGame extends Activity {
         target.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+                IntentIntegrator integrator = new IntentIntegrator(LiveGame.this);
+                integrator.initiateScan();
             }
         });
     }
@@ -108,7 +111,21 @@ public class LiveGame extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanResult != null) {
+            // handle scan result
+            final String contantsString = scanResult.getContents()==null?"0":scanResult.getContents();
+            if (contantsString.equalsIgnoreCase("0")) {
+                Toast.makeText(this, "Problem to get the  contant Number", Toast.LENGTH_LONG).show();
 
+            }else {
+                Toast.makeText(this, contantsString, Toast.LENGTH_LONG).show();
+
+            }
+        }
+        else{
+            Toast.makeText(this, "Problem to secan the barcode.", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
