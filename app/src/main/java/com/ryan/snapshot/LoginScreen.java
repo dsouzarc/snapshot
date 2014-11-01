@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.widget.Button;
+import android.content.Intent;
+import android.view.View;
 
 public class LoginScreen extends Activity {
 
@@ -12,6 +14,16 @@ public class LoginScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
+
+        final Button login = (Button) findViewById(R.id.loginButton);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent toLobby = new Intent(LoginScreen.this, Lobby.class);
+                startActivity(toLobby);
+            }
+        });
     }
 
 

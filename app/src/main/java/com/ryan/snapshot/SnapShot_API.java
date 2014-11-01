@@ -1,7 +1,7 @@
 package com.ryan.snapshot;
 
 /**
- * Singleton API 
+ * Singleton API
  */
 public class SnapShot_API {
     private static final SnapShot_API API = new SnapShot_API();
