@@ -9,6 +9,7 @@ import com.ryan.snapshot.camera.IntentIntegrator;
 import android.widget.Button;
 import android.widget.Toast;
 import com.ryan.snapshot.camera.IntentResult;
+
 public class LiveGame extends Activity {
 
     @Override
@@ -16,7 +17,7 @@ public class LiveGame extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_game);
 
-        final Button scanCode = (Button) findViewById(com.ryan.snapshot.R.id.buttonScanQRCode);
+        final Button scanCode = (Button) findViewById(R.id.buttonScanQRCode);
         scanCode.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
@@ -29,7 +30,7 @@ public class LiveGame extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        com.ryan.snapshot.camera.IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
 
             // handle scan result
@@ -49,16 +50,12 @@ public class LiveGame extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.live_game, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
