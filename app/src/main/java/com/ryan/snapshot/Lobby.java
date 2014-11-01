@@ -38,7 +38,7 @@ public class Lobby extends ListActivity {
         listItems.add("Clicked : "+clickCounter++);
         adapter.notifyDataSetChanged();
     }
-
+    
     private final View.OnClickListener liveGameListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
