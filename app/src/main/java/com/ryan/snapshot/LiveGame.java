@@ -4,18 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.ryan.snapshot.R;
 import android.content.Intent;
+import com.ryan.snapshot.camera.IntentIntegrator;
 import android.widget.Button;
-import android.view.View;
-import android.app.Activity;
 import android.widget.Toast;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.content.Intent;
-import android.view.View;
+import com.ryan.snapshot.camera.IntentResult;
 public class LiveGame extends Activity {
 
     @Override
@@ -36,7 +29,7 @@ public class LiveGame extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        com.ryan.snapshot.camera.IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
 
             // handle scan result

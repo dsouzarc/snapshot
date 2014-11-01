@@ -1,4 +1,4 @@
-package com.ryan.snapshot;
+package com.ryan.snapshot.camera;
 
 public final class IntentResult {
 
