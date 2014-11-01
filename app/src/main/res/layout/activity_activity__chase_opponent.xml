@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/layout"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent" >
-
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
     <SurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:text="Capture Target"
-        android:minHeight="64dp"
-        android:id="@+id/captureButton" android:background="#ff4fceff"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="1">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -30,14 +20,12 @@
             android:layout_weight="0.5"
             android:layout_gravity="top"
             android:weightSum="1">
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:id="@+id/topLeft"
                 android:layout_gravity="top"/>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -53,22 +41,27 @@
             android:layout_weight="0.5"
             android:layout_gravity="bottom"
             android:weightSum="1">
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:id="@+id/bottomLeft"
                 android:layout_gravity="bottom"/>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:id="@+id/bottomRight"
                 android:layout_gravity="bottom"/>
-
         </LinearLayout>
     </LinearLayout>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="Capture Target"
+        android:minHeight="64dp"
+        android:id="@+id/captureButton"
+        android:background="#ff4fceff"/>
 </FrameLayout>
