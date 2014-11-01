@@ -19,5 +19,5 @@
         android:id="@+id/target_photoIV"
         app:border_color="#EEEEEE"
         app:border_width="4dp"
-        app:shadow="true" />
+        app:shadow="true" android:layout_centerHorizontal="true"/>
 </RelativeLayout>

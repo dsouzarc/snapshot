@@ -33,7 +33,7 @@ public class LiveGame extends Activity {
         setContentView(R.layout.activity_live_game);
 
         final CircularImageView target = (CircularImageView) findViewById(R.id.target_photoIV);
-        target.setImageBitmap(getResizedBitmap(250, 250, R.drawable.sample_profile_photo));
+        target.setImageBitmap(generateCrossHair(getResizedBitmap(250, 250, R.drawable.sample_profile_photo)));
 
         target.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,34 +69,23 @@ public class LiveGame extends Activity {
     }
 
     public Bitmap getResizedBitmap(int targetW, int targetH,  final int resID) {
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        //inJustDecodeBounds = true <-- will not load the bitmap into memory
+        final BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(getResources(), resID, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
+        final int photoW = bmOptions.outWidth;
+        final int photoH = bmOptions.outHeight;
+        final int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resID, bmOptions);
-        return(bitmap);
+        return BitmapFactory.decodeResource(getResources(), resID, bmOptions);
     }
 
-    private Bitmap generateCrossHair(final Bitmap profile) {
-        final Bitmap profilePhoto = Bitmap.createScaledBitmap(profile, PROFILE_PHOTO_SIZE,
-                PROFILE_PHOTO_SIZE, false);
+    private Bitmap generateCrossHair(final Bitmap profilePhoto) {
         final Bitmap bmOverlay = Bitmap.createBitmap(profilePhoto.getWidth(),
                 profilePhoto.getHeight(), profilePhoto.getConfig());
         final Paint paint = new Paint();
-        paint.setStrokeWidth(6f);
+        paint.setStrokeWidth(8f);
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
