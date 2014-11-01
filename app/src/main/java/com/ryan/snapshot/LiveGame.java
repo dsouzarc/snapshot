@@ -17,8 +17,6 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import com.ryan.snapshot.camera.IntentIntegrator;
-import com.ryan.snapshot.camera.IntentResult;
 
 public class LiveGame extends Activity {
 
@@ -31,8 +29,6 @@ public class LiveGame extends Activity {
         scanCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
-                IntentIntegrator integrator = new IntentIntegrator(LiveGame.this);
-                integrator.initiateScan();
             }
         });
 
@@ -71,19 +67,7 @@ public class LiveGame extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (scanResult != null) {
-            final String contantsString = scanResult.getContents()==null?"0":scanResult.getContents();
-            if (contantsString.equalsIgnoreCase("0")) {
-                makeToast("No text gotten");
-            }
-            else {
-                makeToast(contantsString);
-            }
-        }
-        else {
-            makeToast("Scanning problem");
-        }
+
     }
 
     @Override
