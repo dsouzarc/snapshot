@@ -30,13 +30,24 @@ public class LoginActivity extends Activity {
     protected Button mLoginButton;
     protected TextView mSignUpButton;
 
+    private MobileServiceClient mClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
 
-
+        try {
+            mClient = new MobileServiceClient(
+                    "https://snapshot.azure-mobile.net/",
+                    "gzWFegbXiTLVoLkHtqvDKPzctugOGH61",
+                    this
+            );
+        }
+        catch(Exception e) {
+            makeToast(e.toString());
+        }
 
         mSignUpButton = (Button)findViewById(R.id.signupButton);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
