@@ -22,7 +22,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.io.File;
