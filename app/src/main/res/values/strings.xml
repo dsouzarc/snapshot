@@ -22,4 +22,6 @@
     <string name="menu_logout_label">Logout</string>
     <string name="title_activity_activity__chase_opponent">Activity_Chase_opponent</string>
 
+    <string name="facebook_app_id">1544898009087276</string>
+
 </resources>
