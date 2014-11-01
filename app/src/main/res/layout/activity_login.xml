@@ -16,9 +16,10 @@
         android:layout_alignParentTop="true"
         android:ems="10"
         android:hint="@string/username_hint" >
-
         <requestFocus />
     </EditText>
+
+
 
     <EditText
         android:id="@+id/passwordField"
