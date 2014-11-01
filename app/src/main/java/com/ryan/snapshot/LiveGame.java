@@ -23,6 +23,7 @@ import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import android.widget.ImageView;
+import android.content.Intent;
 
 public class LiveGame extends Activity {
     private static final int PROFILE_PHOTO_SIZE = 500;
@@ -38,7 +39,8 @@ public class LiveGame extends Activity {
         target.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                final Intent toCamera = new Intent(LiveGame.this, Activity_Chase_opponent.class);
+                startActivity(toCamera);
             }
         });
     }
