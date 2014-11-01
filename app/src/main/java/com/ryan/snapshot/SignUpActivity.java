@@ -62,6 +62,28 @@ public class SignUpActivity extends Activity{
                     newUser.setUsername(username);
                     newUser.setPassword(password);
                     newUser.setEmail(email);
+                    newUser.signUpInBackground(new SignUpCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            setProgressBarIndeterminateVisibility(false);
+
+                            if (e == null) {
+                                // Success!
+                                Intent intent = new Intent(SignUpActivity.this, Lobby.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                            else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                                builder.setMessage(e.getMessage())
+                                        .setTitle(R.string.signup_error_title)
+                                        .setPositiveButton(android.R.string.ok, null);
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        }
+                    });
                 }
             }
         });
