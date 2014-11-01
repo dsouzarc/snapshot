@@ -8,7 +8,14 @@ import com.ryan.snapshot.R;
 import android.content.Intent;
 import android.widget.Button;
 import android.view.View;
-
+import android.app.Activity;
+import android.widget.Toast;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Button;
+import android.content.Intent;
+import android.view.View;
 public class LiveGame extends Activity {
 
     @Override
@@ -16,9 +23,36 @@ public class LiveGame extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_game);
 
+        final Button scanCode = (Button) findViewById(com.ryan.snapshot.R.id.buttonScanQRCode);
+        scanCode.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+                IntentIntegrator integrator = new IntentIntegrator(LiveGame.this);
+                integrator.initiateScan();
+            }
+        });
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanResult != null) {
+
+            // handle scan result
+            final String contantsString = scanResult.getContents()==null?"0":scanResult.getContents();
+            if (contantsString.equalsIgnoreCase("0")) {
+                Toast.makeText(this, "Problem to get the  contant Number", Toast.LENGTH_LONG).show();
+
+            }else {
+                Toast.makeText(this, contantsString, Toast.LENGTH_LONG).show();
+
+            }
+        }
+        else{
+            Toast.makeText(this, "Problem to secan the barcode.", Toast.LENGTH_LONG).show();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
