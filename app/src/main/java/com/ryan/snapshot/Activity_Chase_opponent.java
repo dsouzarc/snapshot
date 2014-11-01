@@ -73,8 +73,8 @@ public class Activity_Chase_opponent extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.theC = getApplicationContext();
-        this.theActivity = Activity_Chase_opponent.this;
+        theC = this;
+        theActivity = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_activity__chase_opponent);
@@ -90,8 +90,8 @@ public class Activity_Chase_opponent extends Activity {
             }
         });
 
-        this.captureButton = (Button) findViewById(com.ryan.snapshot.R.id.captureButton);
-        this.captureButton.setOnClickListener(new View.OnClickListener() {
+        captureButton = (Button) findViewById(com.ryan.snapshot.R.id.captureButton);
+        captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 camera.takePicture(shutterCallback, rawCallback, jpegCallback);
@@ -100,14 +100,6 @@ public class Activity_Chase_opponent extends Activity {
 
         makeToast("Capture Target");
 
-        //		buttonClick = (Button) findViewById(R.id.btnCapture);
-        //
-        //		buttonClick.setOnClickListener(new OnClickListener() {
-        //			public void onClick(View v) {
-        ////				preview.camera.takePicture(shutterCallback, rawCallback, jpegCallback);
-        //				camera.takePicture(shutterCallback, rawCallback, jpegCallback);
-        //			}
-        //		});
         //
         //		buttonClick.setOnLongClickListener(new OnLongClickListener(){
         //			@Override
@@ -155,7 +147,7 @@ public class Activity_Chase_opponent extends Activity {
     }
 
     private void refreshGallery(File file) {
-        Intent mediaScanIntent = new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         mediaScanIntent.setData(Uri.fromFile(file));
         sendBroadcast(mediaScanIntent);
     }
