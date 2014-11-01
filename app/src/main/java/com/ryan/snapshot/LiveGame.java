@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.graphics.Paint;
 import android.view.MenuItem;
 import android.graphics.Canvas;
+import com.pkmmte.view.CircularImageView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -31,32 +32,62 @@ public class LiveGame extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_game);
 
-        final ImageView target = (ImageView) findViewById(R.id.target_photoIV);
-        target.setImageBitmap(generateCrossHair(BitmapFactory.decodeResource(getResources(), R.drawable.sample_profile_photo)));
+        final CircularImageView target = (CircularImageView) findViewById(R.id.target_photoIV);
+        target.setImageBitmap(getResizedBitmap(250, 250, R.drawable.sample_profile_photo));
 
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.qr_code_test);
+        target.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
+    }
+
+    public String getString(final Bitmap qrCode) {
         try {
-            final int width = bitmap.getWidth(), height = bitmap.getHeight();
+            final int width = qrCode.getWidth(), height = qrCode.getHeight();
             final int[] pixels = new int[width * height];
-            bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-            bitmap.recycle();
-
+            qrCode.getPixels(pixels, 0, width, 0, 0, width, height);
+            qrCode.recycle();
             final RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels);
             final BinaryBitmap bBitmap = new BinaryBitmap(new HybridBinarizer(source));
             final MultiFormatReader reader = new MultiFormatReader();
 
             try {
                 final Result result = reader.decode(bBitmap);
-                log(result.getText());
+                return result.getText();
             }
             catch (Exception e) {
                 log(e.toString());
+                return e.toString();
             }
         }
         catch (Exception e) {
             log(e.toString());
+            return e.toString();
         }
+    }
+
+    public Bitmap getResizedBitmap(int targetW, int targetH,  final int resID) {
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        //inJustDecodeBounds = true <-- will not load the bitmap into memory
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(getResources(), resID, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resID, bmOptions);
+        return(bitmap);
     }
 
     private Bitmap generateCrossHair(final Bitmap profile) {
@@ -69,6 +100,7 @@ public class LiveGame extends Activity {
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
+
         final Canvas canvas = new Canvas(bmOverlay);
         canvas.drawBitmap(profilePhoto, new Matrix(), null);
         canvas.drawLine(0, profilePhoto.getHeight()/2, profilePhoto.getWidth(), profilePhoto.getHeight()/2, paint);
