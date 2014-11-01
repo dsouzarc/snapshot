@@ -1,9 +1,4 @@
-package com.ryan.snapshot;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+package com.ryan.snapshot.camera;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,6 +9,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.util.Log;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 
 public final class IntentIntegrator {
