@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoginScreen"
+            android:name="com.ryan.snapshot.LoginScreen"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,16 +19,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Lobby"
+            android:name="com.ryan.snapshot.Lobby"
             android:label="@string/title_activity_game_set_up" >
         </activity>
         <activity
-            android:name=".LiveGame"
+            android:name="com.ryan.snapshot.LiveGame"
             android:label="@string/title_activity_live_game" >
         </activity>
         <activity
-            android:name=".GameDetails"
+            android:name="com.ryan.snapshot.GameDetails"
             android:label="@string/title_activity_game_details" >
+        </activity>
+        <activity
+            android:name="com.ryan.snapshot.Application"
+            android:label="@string/title_activity_application" >
         </activity>
     </application>
 
