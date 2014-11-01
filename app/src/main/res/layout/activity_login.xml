@@ -19,8 +19,6 @@
         <requestFocus />
     </EditText>
 
-
-
     <EditText
         android:id="@+id/passwordField"
         android:layout_width="match_parent"
@@ -45,6 +43,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/realLoginButton"
         android:text="signup" />
+
+    <com.facebook.widget.LoginButton
+        android:id="@+id/authButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_below="@+id/signupButton"
+        android:layout_marginTop="30dp" />
 
     <Button
         android:layout_width="match_parent"

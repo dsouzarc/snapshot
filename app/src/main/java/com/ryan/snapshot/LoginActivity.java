@@ -6,10 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.widget.TextView;
+import com.facebook.*;
+import com.facebook.model.*;
 import android.widget.TextView;
 
 
@@ -25,6 +33,29 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
+
+        // start Facebook Login
+        Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+            // callback when session changes state
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+                if (session.isOpened()) {
+
+                    // make request to the /me API
+                    Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+                        // callback after Graph API response with user object
+                        @Override
+                        public void onCompleted(GraphUser user, Response response) {
+                            if (user != null) {
+                                makeToast(user.getName());
+                            }
+                        }
+                    }).executeAsync();
+                }
+            }
+        });
 
         mSignUpButton = (Button)findViewById(R.id.signupButton);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +107,15 @@ public class LoginActivity extends Activity {
         }
     };
 
+    private void makeToast(final String toast) {
+        Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
