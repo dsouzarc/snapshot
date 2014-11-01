@@ -8,15 +8,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.graphics.Canvas;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.graphics.Matrix;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
+import android.widget.ImageView;
 
 public class LiveGame extends Activity {
 
@@ -25,12 +28,8 @@ public class LiveGame extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_game);
 
-        final Button scanCode = (Button) findViewById(R.id.buttonScanQRCode);
-        scanCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-            }
-        });
+        final ImageView target = (ImageView) findViewById(R.id.target_photoIV);
+        target.setImageBitmap(generateCrossHair(BitmapFactory.decodeResource(getResources(), R.drawable.sample_profile_photo)));
 
         final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.qr_code_test);
 
@@ -55,6 +54,19 @@ public class LiveGame extends Activity {
         catch (Exception e) {
             log(e.toString());
         }
+    }
+
+    private Bitmap generateCrossHair(final Bitmap profile) {
+        final Bitmap crossHair = BitmapFactory.decodeResource(getResources(), R.drawable.sniper_crosshair);
+        final Bitmap profilePhoto = Bitmap.createScaledBitmap(profile, crossHair.getWidth(),
+                crossHair.getHeight(), false);
+        final Bitmap bmOverlay = Bitmap.createBitmap(crossHair.getWidth(),
+                crossHair.getHeight(), crossHair.getConfig());
+
+        final Canvas canvas = new Canvas(bmOverlay);
+        canvas.drawBitmap(profilePhoto, new Matrix(), null);
+        canvas.drawBitmap(crossHair, new Matrix(), null);
+        return bmOverlay;
     }
 
     private void makeToast(final String text) {
