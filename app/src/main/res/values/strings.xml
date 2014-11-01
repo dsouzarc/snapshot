@@ -20,6 +20,6 @@
     <string name="login_error_message">Please make sure you enter a username and password!</string>
     <string name="login_error_title">Oops!</string>
     <string name="menu_logout_label">Logout</string>
-
+    <string name="title_activity_activity__chase_opponent">Activity_Chase_opponent</string>
 
 </resources>
