@@ -63,6 +63,8 @@ public class Activity_Chase_opponent extends Activity {
     private Activity act;
     private Context ctx;
 
+    private int zoomLevel = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,29 +77,61 @@ public class Activity_Chase_opponent extends Activity {
 
         preview = new Preview(this, (SurfaceView)findViewById(R.id.surfaceView));
         preview.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        ((FrameLayout) findViewById(R.id.layout)).addView(preview);
+
+        final FrameLayout frameLayout = (FrameLayout) findViewById(R.id.layout);
+
+        frameLayout.addView(preview);
         preview.setKeepScreenOn(true);
-        this.camera.setZoomChangeListener(new android.hardware.Camera.OnZoomChangeListener() {
-            @Override
-            public void onZoomChange(int i, boolean b, android.hardware.Camera camera) {
-
-            }
-        });
-
         preview.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                camera.takePicture(shutterCallback, rawCallback, jpegCallback);
+                //camera.takePicture(shutterCallback, rawCallback, jpegCallback);
             }
         });
 
-        buttonClick = (Button) ((FrameLayout) findViewById(R.id.layout)).findViewById(R.id.captureButton);
+        buttonClick = (Button) frameLayout.findViewById(R.id.captureButton);
         buttonClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 camera.takePicture(shutterCallback, rawCallback, jpegCallback);
             }
         });
+        frameLayout.findViewById(R.id.topLeft).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                zoomOut(1);
+                makeToast("WHAT");
+                return false;
+            }
+        });
+
+        frameLayout.findViewById(R.id.topRight).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                zoomOut(1);
+                makeToast("WHAT");
+                return false;
+            }
+        });
+
+        frameLayout.findViewById(R.id.bottomLeft).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                zoomOut(1);
+                makeToast("WHAT");
+                return false;
+            }
+        });
+
+        frameLayout.findViewById(R.id.bottomRight).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                zoomOut(1);
+                makeToast("WHAT");
+                return false;
+            }
+        });
+
 
         Toast.makeText(ctx, "Take Photo", Toast.LENGTH_LONG).show();
         //
@@ -113,6 +147,28 @@ public class Activity_Chase_opponent extends Activity {
         //				return true;
         //			}
         //		});
+    }
+
+    private void log(final String message) {
+        Log.e("com.ryan.snapshot", message);
+    }
+
+    private void makeToast(final String toast) {
+        Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
+    }
+
+    private void zoomIn(final int speed) {
+        zoomLevel += speed;
+        camera.startSmoothZoom(speed);
+    }
+
+    private void zoomOut(final int speed) {
+        if(zoomLevel != 0 && zoomLevel != -1 && zoomLevel != -2) {
+            zoomLevel = speed * -1;
+        }
+        zoomLevel -= speed;
+        camera.stopSmoothZoom();
+        camera.startSmoothZoom(zoomLevel);
     }
 
     @Override
