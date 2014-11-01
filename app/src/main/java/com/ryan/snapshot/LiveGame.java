@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.graphics.Color;
 import android.view.Menu;
+import android.graphics.Paint;
 import android.view.MenuItem;
 import android.graphics.Canvas;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.google.zxing.common.HybridBinarizer;
 import android.widget.ImageView;
 
 public class LiveGame extends Activity {
+    private static final int PROFILE_PHOTO_SIZE = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +60,19 @@ public class LiveGame extends Activity {
     }
 
     private Bitmap generateCrossHair(final Bitmap profile) {
-        final Bitmap crossHair = BitmapFactory.decodeResource(getResources(), R.drawable.sniper_crosshair);
-        final Bitmap profilePhoto = Bitmap.createScaledBitmap(profile, crossHair.getWidth(),
-                crossHair.getHeight(), false);
-        final Bitmap bmOverlay = Bitmap.createBitmap(crossHair.getWidth(),
-                crossHair.getHeight(), crossHair.getConfig());
-
+        final Bitmap profilePhoto = Bitmap.createScaledBitmap(profile, PROFILE_PHOTO_SIZE,
+                PROFILE_PHOTO_SIZE, false);
+        final Bitmap bmOverlay = Bitmap.createBitmap(profilePhoto.getWidth(),
+                profilePhoto.getHeight(), profilePhoto.getConfig());
+        final Paint paint = new Paint();
+        paint.setStrokeWidth(6f);
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
         final Canvas canvas = new Canvas(bmOverlay);
         canvas.drawBitmap(profilePhoto, new Matrix(), null);
-        canvas.drawBitmap(crossHair, new Matrix(), null);
+        canvas.drawLine(0, profilePhoto.getHeight()/2, profilePhoto.getWidth(), profilePhoto.getHeight()/2, paint);
+        canvas.drawLine(profilePhoto.getWidth()/2, 0, profilePhoto.getWidth()/2, profilePhoto.getHeight(), paint);
         return bmOverlay;
     }
 
