@@ -1,6 +1,7 @@
 package com.ryan.snapshot;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +14,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class Lobby extends Activity {
+public class Lobby extends ListActivity {
     private EditText etInput;
     private Button btnAdd;
     private ListView lvItem;
