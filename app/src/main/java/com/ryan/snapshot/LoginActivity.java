@@ -21,7 +21,7 @@ public class LoginActivity extends Activity {
     protected EditText mUsername;
     protected EditText mPassword;
     protected Button mLoginButton;
-    protected TextView mSignUpTextView;
+    protected TextView mSignUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +29,8 @@ public class LoginActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
 
-        mSignUpTextView = (TextView)findViewById(R.id.signUpText);
-        mSignUpTextView.setOnClickListener(new View.OnClickListener() {
+        mSignUpButton = (Button)findViewById(R.id.signupButton);
+        mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);

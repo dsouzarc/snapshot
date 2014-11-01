@@ -1,9 +1,12 @@
 package com.ryan.snapshot;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,8 +39,41 @@ public class Lobby extends ListActivity {
     }
 
     public void addItems(View v) {
-        listItems.add("Clicked : "+clickCounter++);
-        adapter.notifyDataSetChanged();
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptView = layoutInflater.inflate(R.layout.set_people_limit, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptView);
+        final EditText input = (EditText) promptView.findViewById(R.id.userInput);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            if (!input.getText().toString().trim().isEmpty()) {
+                                int num = Integer.parseInt(input.getText().toString());
+                                listItems.add(input.getText().toString());
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Make sure you type a value!", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (NumberFormatException e) {
+                            // input is not a number
+                            Toast.makeText(getApplicationContext(), "Make sure the value is an integer!", Toast.LENGTH_LONG).show();
+                        }
+                        //editTextMainScreen.setText(input.getText());
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+
+        // listItems.add("Clicked : "+clickCounter++);
+        // adapter.notifyDataSetChanged();
     }
 
     private final View.OnClickListener liveGameListener = new View.OnClickListener() {

@@ -14,8 +14,7 @@ public class Application extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Parse.initialize(this, "aDaI7FmzfiFcgoHucvC2OEDzqiGsC2n0bcoFVsh4", "YzcvNDwvKfkjpjRnZJKUWxlmxrQHhmcavZkgFzFy");
-
+        Parse.initialize(this, "bakAKyvOrQMPzvBbc6yIc8JRoVv9zsZS2dinh7V7", "YhPwVxYKxeaWZTugfqXFsMnYE8jRQ6irDKLPGupg");
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", "bar");
         testObject.saveInBackground();
