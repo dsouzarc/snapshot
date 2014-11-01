@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.ryan.snapshot.R;
 
-public class GameSetUp extends Activity {
+public class Lobby extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_set_up);
+        setContentView(R.layout.activity_lobby);
     }
 
 

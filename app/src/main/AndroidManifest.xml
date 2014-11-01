@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GameSetUp"
+            android:name=".Lobby"
             android:label="@string/title_activity_game_set_up" >
         </activity>
     </application>
