@@ -77,6 +77,12 @@ public class Activity_Chase_opponent extends Activity {
         preview.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         ((FrameLayout) findViewById(R.id.layout)).addView(preview);
         preview.setKeepScreenOn(true);
+        this.camera.setZoomChangeListener(new android.hardware.Camera.OnZoomChangeListener() {
+            @Override
+            public void onZoomChange(int i, boolean b, android.hardware.Camera camera) {
+
+            }
+        });
 
         preview.setOnClickListener(new OnClickListener() {
             @Override
@@ -85,7 +91,13 @@ public class Activity_Chase_opponent extends Activity {
             }
         });
 
-        
+        buttonClick = (Button) ((FrameLayout) findViewById(R.id.layout)).findViewById(R.id.captureButton);
+        buttonClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                camera.takePicture(shutterCallback, rawCallback, jpegCallback);
+            }
+        });
 
         Toast.makeText(ctx, "Take Photo", Toast.LENGTH_LONG).show();
         //
