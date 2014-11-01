@@ -7,6 +7,7 @@ import android.view.Menu;
 import java.io.IOException;
 import java.util.List;
 
+import android.widget.SeekBar;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
@@ -96,41 +97,26 @@ public class Activity_Chase_opponent extends Activity {
                 camera.takePicture(shutterCallback, rawCallback, jpegCallback);
             }
         });
-        frameLayout.findViewById(R.id.topLeft).setOnLongClickListener(new View.OnLongClickListener() {
+
+        final SeekBar seekBar = (SeekBar) frameLayout.findViewById(R.id.zoomBar);
+
+        seekBar.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
             @Override
-            public boolean onLongClick(View view) {
-                zoomOut(1);
-                makeToast("WHAT");
-                return false;
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
-        frameLayout.findViewById(R.id.topRight).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                zoomOut(1);
-                makeToast("WHAT");
-                return false;
-            }
-        });
-
-        frameLayout.findViewById(R.id.bottomLeft).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                zoomOut(1);
-                makeToast("WHAT");
-                return false;
-            }
-        });
-
-        frameLayout.findViewById(R.id.bottomRight).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                zoomOut(1);
-                makeToast("WHAT");
-                return false;
-            }
-        });
 
 
         Toast.makeText(ctx, "Take Photo", Toast.LENGTH_LONG).show();
