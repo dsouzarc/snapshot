@@ -53,7 +53,16 @@ public class SignUpActivity extends Activity{
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-                
+
+                else {
+                    // create the new user!
+                    setProgressBarIndeterminateVisibility(true);
+
+                    ParseUser newUser = new ParseUser();
+                    newUser.setUsername(username);
+                    newUser.setPassword(password);
+                    newUser.setEmail(email);
+                }
             }
         });
     }
