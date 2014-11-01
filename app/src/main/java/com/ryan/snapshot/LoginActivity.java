@@ -19,18 +19,10 @@ import android.widget.TextView;
 import android.widget.TextView;
 import java.net.MalformedURLException;
 import android.os.AsyncTask;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.MobileServiceList;
-import com.microsoft.windowsazure.mobileservices.http.NextServiceFilterCallback;
-import com.microsoft.windowsazure.mobileservices.http.ServiceFilter;
-import com.microsoft.windowsazure.mobileservices.http.ServiceFilterRequest;
-import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import java.util.ArrayList;
 import java.util.List;
+import com.microsoft.windowsazure.mobileservices.*;
+
 public class LoginActivity extends Activity {
 
     protected EditText mUsername;
@@ -43,6 +35,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
+
 
 
         mSignUpButton = (Button)findViewById(R.id.signupButton);

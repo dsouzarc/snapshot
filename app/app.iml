@@ -85,10 +85,14 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="circularimageview-1.1" level="project" />
     <orderEntry type="library" exported="" name="guava-17.0" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="core" level="project" />
+    <orderEntry type="library" exported="" name="notification-hubs-0.4" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="mobileservices-2.0.1-beta" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.1.2" level="project" />
+    <orderEntry type="library" exported="" name="notifications-1.0.1" level="project" />
+    <orderEntry type="library" exported="" name="mobileservices-1.1.5" level="project" />
     <orderEntry type="module" module-name="facebook" exported="" />
   </component>
 </module>
