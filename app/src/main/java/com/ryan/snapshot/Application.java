@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 
 public class Application extends Activity {
@@ -14,6 +15,10 @@ public class Application extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Parse.initialize(this, "aDaI7FmzfiFcgoHucvC2OEDzqiGsC2n0bcoFVsh4", "YzcvNDwvKfkjpjRnZJKUWxlmxrQHhmcavZkgFzFy");
+
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
     }
 
 
