@@ -15,19 +15,28 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class Lobby extends ListActivity {
-    private EditText etInput;
-    private Button btnAdd;
-    private ListView lvItem;
-    private ArrayList<String> itemArrey;
-    private ArrayAdapter<String> itemAdapter;
+
+    ArrayList<String> listItems=new ArrayList<String>();
+    ArrayAdapter<String> adapter;
+    int clickCounter=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
+        adapter=new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                listItems);
+        setListAdapter(adapter);
+
         final Button buttonToLiveGame = (Button) findViewById(R.id.buttonLiveGame);
         buttonToLiveGame.setOnClickListener(liveGameListener);
+    }
+
+    public void addItems(View v) {
+        listItems.add("Clicked : "+clickCounter++);
+        adapter.notifyDataSetChanged();
     }
 
     private final View.OnClickListener liveGameListener = new View.OnClickListener() {

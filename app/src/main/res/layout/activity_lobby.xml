@@ -13,11 +13,10 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@id/buttonLayout">
+        android:layout_height="fill_parent">
         <Button
             android:id="@+id/addButton"
-            android:text="Add New Item"
+            android:text="+"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="addItems"/>
@@ -25,14 +24,12 @@
             android:id="@android:id/list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:drawSelectorOnTop="false"
-            />
+            android:drawSelectorOnTop="false"/>
     </LinearLayout>
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="To Live Game"
-        android:layout_below="@+id/buttonLayout"
         android:layout_alignParentBottom="true"
         android:id="@+id/buttonLiveGame"/>
 </RelativeLayout>
