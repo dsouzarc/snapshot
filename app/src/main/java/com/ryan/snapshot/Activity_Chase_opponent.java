@@ -64,37 +64,41 @@ import android.view.ViewGroup;
 
 public class Activity_Chase_opponent extends Activity {
 
-    private static final String TAG = "CamTestActivity";
-    Preview preview;
-    Button buttonClick;
-    Camera camera;
-    Activity act;
-    Context ctx;
+    private Preview preview;
+    private Button captureButton;
+    private Camera camera;
+    private Activity theActivity;
+    private Context theC;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ctx = this;
-        act = this;
+        this.theC = getApplicationContext();
+        this.theActivity = Activity_Chase_opponent.this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        setContentView(com.ryan.snapshot.R.layout.activity_activity__chase_opponent);
+        setContentView(R.layout.activity_activity__chase_opponent);
 
         preview = new Preview(this, (SurfaceView)findViewById(R.id.surfaceView));
         preview.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         ((FrameLayout) findViewById(R.id.layout)).addView(preview);
         preview.setKeepScreenOn(true);
-
         preview.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
+
+            }
+        });
+
+        this.captureButton = (Button) findViewById(com.ryan.snapshot.R.id.captureButton);
+        this.captureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 camera.takePicture(shutterCallback, rawCallback, jpegCallback);
             }
         });
 
-        Toast.makeText(ctx, "Take photo help", Toast.LENGTH_LONG).show();
+        makeToast("Capture Target");
 
         //		buttonClick = (Button) findViewById(R.id.btnCapture);
         //
@@ -129,7 +133,7 @@ public class Activity_Chase_opponent extends Activity {
                 camera.startPreview();
                 preview.setCamera(camera);
             } catch (RuntimeException ex){
-                Toast.makeText(ctx, "NO CAMERA", Toast.LENGTH_LONG).show();
+                makeToast("No camera");
             }
         }
     }
@@ -172,7 +176,7 @@ public class Activity_Chase_opponent extends Activity {
         public void onPictureTaken(byte[] data, Camera camera) {
             new SaveImageTask().execute(data);
             resetCam();
-            Log.d(TAG, "onPictureTaken - jpeg");
+            log("Pic taken");
         }
     };
 
@@ -196,7 +200,7 @@ public class Activity_Chase_opponent extends Activity {
                 outStream.flush();
                 outStream.close();
 
-                Log.d(TAG, "onPictureTaken - wrote bytes: " + data.length + " to " + outFile.getAbsolutePath());
+                log("onPictureTaken - wrote bytes: " + data.length + " to " + outFile.getAbsolutePath());
 
                 refreshGallery(outFile);
             } catch (FileNotFoundException e) {
@@ -355,5 +359,13 @@ public class Activity_Chase_opponent extends Activity {
             }
         }
 
+    }
+
+    private void makeToast(final String message) {
+        Toast.makeText(theC, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void log(final String message) {
+        Log.e("com.ryan.snapshot", message);
     }
 }
