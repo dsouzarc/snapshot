@@ -4,26 +4,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
-import android.graphics.Color;
 import android.view.Menu;
-import android.graphics.Paint;
 import android.view.MenuItem;
-import android.graphics.Canvas;
-import com.pkmmte.view.CircularImageView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
-import android.graphics.Matrix;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import android.widget.ImageView;
-import android.content.Intent;
+import com.pkmmte.view.CircularImageView;
 
 public class LiveGame extends Activity {
     private static final int PROFILE_PHOTO_SIZE = 500;
@@ -39,8 +36,7 @@ public class LiveGame extends Activity {
         target.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Intent toCamera = new Intent(LiveGame.this, Activity_Chase_opponent.class);
-                startActivity(toCamera);
+                IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             }
         });
     }

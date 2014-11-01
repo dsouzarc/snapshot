@@ -1,7 +1,6 @@
 package com.ryan.snapshot;
 
 import android.app.Application;
-import android.os.Bundle;
 
 import com.parse.Parse;
 import com.parse.ParseObject;

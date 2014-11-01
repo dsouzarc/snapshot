@@ -1,59 +1,35 @@
 package com.ryan.snapshot;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-
-import java.io.IOException;
-import java.util.List;
-
-import android.widget.SeekBar;
-import android.content.Context;
-import android.hardware.Camera;
-import android.hardware.Camera.Size;
-import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.MenuItem;
-
-import android.content.Context;
-import android.hardware.Camera;
-import android.hardware.Camera.Size;
-import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
-
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
+import android.hardware.Camera.Size;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 public class Activity_Chase_opponent extends Activity {
 
@@ -63,8 +39,6 @@ public class Activity_Chase_opponent extends Activity {
     private Camera camera;
     private Activity act;
     private Context ctx;
-
-    private int zoomLevel = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +60,7 @@ public class Activity_Chase_opponent extends Activity {
         preview.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //camera.takePicture(shutterCallback, rawCallback, jpegCallback);
+                camera.takePicture(shutterCallback, rawCallback, jpegCallback);
             }
         });
 
@@ -98,41 +72,7 @@ public class Activity_Chase_opponent extends Activity {
             }
         });
 
-        final SeekBar seekBar = (SeekBar) frameLayout.findViewById(R.id.zoomBar);
-
-        seekBar.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-
-
         Toast.makeText(ctx, "Take Photo", Toast.LENGTH_LONG).show();
-        //
-        //		buttonClick.setOnLongClickListener(new OnLongClickListener(){
-        //			@Override
-        //			public boolean onLongClick(View arg0) {
-        //				camera.autoFocus(new AutoFocusCallback(){
-        //					@Override
-        //					public void onAutoFocus(boolean arg0, Camera arg1) {
-        //						//camera.takePicture(shutterCallback, rawCallback, jpegCallback);
-        //					}
-        //				});
-        //				return true;
-        //			}
-        //		});
     }
 
     private void log(final String message) {
@@ -141,20 +81,6 @@ public class Activity_Chase_opponent extends Activity {
 
     private void makeToast(final String toast) {
         Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
-    }
-
-    private void zoomIn(final int speed) {
-        zoomLevel += speed;
-        camera.startSmoothZoom(speed);
-    }
-
-    private void zoomOut(final int speed) {
-        if(zoomLevel != 0 && zoomLevel != -1 && zoomLevel != -2) {
-            zoomLevel = speed * -1;
-        }
-        zoomLevel -= speed;
-        camera.stopSmoothZoom();
-        camera.startSmoothZoom(zoomLevel);
     }
 
     @Override
@@ -189,7 +115,7 @@ public class Activity_Chase_opponent extends Activity {
     }
 
     private void refreshGallery(File file) {
-        Intent mediaScanIntent = new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         mediaScanIntent.setData(Uri.fromFile(file));
         sendBroadcast(mediaScanIntent);
     }
@@ -219,8 +145,6 @@ public class Activity_Chase_opponent extends Activity {
         @Override
         protected Void doInBackground(byte[]... data) {
             FileOutputStream outStream = null;
-
-            // Write to SD Card
             try {
                 File sdCard = Environment.getExternalStorageDirectory();
                 File dir = new File (sdCard.getAbsolutePath() + "/camtest");
@@ -259,9 +183,7 @@ public class Activity_Chase_opponent extends Activity {
 
         Preview(Context context, SurfaceView sv) {
             super(context);
-
             mSurfaceView = sv;
-//        addView(mSurfaceView);
 
             mHolder = mSurfaceView.getHolder();
             mHolder.addCallback(this);
@@ -292,8 +214,8 @@ public class Activity_Chase_opponent extends Activity {
             // We purposely disregard child measurements because act as a
             // wrapper to a SurfaceView that centers the camera preview instead
             // of stretching it.
-            final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
-            final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+            final int width = getSuggestedMinimumWidth();//resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
+            final int height = getSuggestedMinimumHeight(); //resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
             setMeasuredDimension(width, height);
 
             if (mSupportedPreviewSizes != null) {
@@ -387,7 +309,6 @@ public class Activity_Chase_opponent extends Activity {
                 Camera.Parameters parameters = mCamera.getParameters();
                 parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
                 requestLayout();
-
                 mCamera.setParameters(parameters);
                 mCamera.startPreview();
             }

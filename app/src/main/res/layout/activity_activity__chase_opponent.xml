@@ -9,15 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/zoomBar"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="96dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"/>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
