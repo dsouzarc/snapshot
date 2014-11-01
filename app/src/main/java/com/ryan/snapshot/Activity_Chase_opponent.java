@@ -4,75 +4,23 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import java.io.File;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
-import android.hardware.Camera.ShutterCallback;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.Toast;
-import java.io.FileNotFoundException;
-import java.io.BufferedOutputStream;
-import android.view.SurfaceHolder;
-import java.util.Date;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import android.view.SurfaceView;
-import android.view.Surface;
-import java.io.IOException;
-import android.content.Context;
-import java.io.BufferedReader;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.FrameLayout;
-import android.view.View;
-import android.hardware.Camera.PictureCallback;
-import android.hardware.Camera;
-import android.widget.Button;
-import java.io.IOException;
-import java.util.List;
-
-import android.content.Context;
-import android.hardware.Camera;
-import android.hardware.Camera.Size;
-import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
 
 public class Activity_Chase_opponent extends Activity {
 
+<<<<<<< HEAD
     private Preview preview;
     private Button captureButton;
     private Camera camera;
     private Activity theActivity;
     private Context theC;
 
+=======
+>>>>>>> parent of 70bfe14... Take photo class implemented
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         theC = this;
         theActivity = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -129,23 +77,20 @@ public class Activity_Chase_opponent extends Activity {
             }
         }
     }
+=======
+        setContentView(R.layout.activity_activity__chase_opponent);
+    }
+
+>>>>>>> parent of 70bfe14... Take photo class implemented
 
     @Override
-    protected void onPause() {
-        if(camera != null) {
-            camera.stopPreview();
-            preview.setCamera(null);
-            camera.release();
-            camera = null;
-        }
-        super.onPause();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_activity__chase_opponent, menu);
+        return true;
     }
 
-    private void resetCam() {
-        camera.startPreview();
-        preview.setCamera(camera);
-    }
-
+<<<<<<< HEAD
     private void refreshGallery(File file) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         mediaScanIntent.setData(Uri.fromFile(file));
@@ -345,13 +290,23 @@ public class Activity_Chase_opponent extends Activity {
                 Camera.Parameters parameters = mCamera.getParameters();
                 parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
                 requestLayout();
+=======
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+>>>>>>> parent of 70bfe14... Take photo class implemented
 
-                mCamera.setParameters(parameters);
-                mCamera.startPreview();
-            }
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }
 
+        return super.onOptionsItemSelected(item);
     }
+<<<<<<< HEAD
 
     private void makeToast(final String message) {
         Toast.makeText(theC, message, Toast.LENGTH_LONG).show();
@@ -361,3 +316,6 @@ public class Activity_Chase_opponent extends Activity {
         Log.e("com.ryan.snapshot", message);
     }
 }
+=======
+}
+>>>>>>> parent of 70bfe14... Take photo class implemented
