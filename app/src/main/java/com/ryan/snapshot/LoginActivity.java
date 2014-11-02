@@ -1,8 +1,9 @@
 package com.ryan.snapshot;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -10,12 +11,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.content.SharedPreferences;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-
-import java.util.List;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +30,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceAuthenticationProvider;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceUser;
-import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
-import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.table.TableQueryCallback;
 
 import org.apache.http.HttpEntity;
@@ -49,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 public class LoginActivity extends Activity {
 
@@ -68,8 +67,9 @@ public class LoginActivity extends Activity {
         theEditor = thePrefs.edit();
 
         try {
-            mClient = new MobileServiceClient("https://snapshot.azure-mobile.net/",
-                    "gzWFegbXiTLVoLkHtqvDKPzctugOGH61", this);
+            SnapShot_API.theActivity = LoginActivity.this;
+            final SnapShot_API theAPI = SnapShot_API.getApi();
+            this.mClient = SnapShot_API.getClient();
 
             final ListenableFuture<MobileServiceUser> mLogin =
                     mClient.login(MobileServiceAuthenticationProvider.Facebook);
