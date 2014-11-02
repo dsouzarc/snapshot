@@ -97,7 +97,7 @@ public class Lobby extends ListActivity {
                         public void onCompleted(final List<Game> games,
                                                 int count, Exception exception,
                                                 ServiceFilterResponse response) {
-                        
+
                         }
                     });
             return games;
