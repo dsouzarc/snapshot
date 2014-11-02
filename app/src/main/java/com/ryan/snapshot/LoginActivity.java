@@ -6,9 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import android.util.Log;
+import com.google.common.util.concurrent.ListenableFuture;
 import android.support.v4.app.Fragment;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.FutureCallback;
 import android.view.View;
+import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceAuthenticationProvider;
+import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceUser;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +27,8 @@ import android.widget.TextView;
 import java.net.MalformedURLException;
 import android.os.AsyncTask;
 import java.util.ArrayList;
+import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
+import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
 import java.util.List;
 import com.microsoft.windowsazure.mobileservices.*;
 
@@ -57,6 +65,19 @@ public class LoginActivity extends Activity {
                         makeToast("FAILED: " + exception.toString());
                         // Insert failed
                     }
+                }
+            });
+
+            ListenableFuture<MobileServiceUser> mLogin = mClient.login(MobileServiceAuthenticationProvider.Google);
+
+            Futures.addCallback(mLogin, new FutureCallback<MobileServiceUser>() {
+                @Override
+                public void onFailure(Throwable exc) {
+                    makeToast("ERROR: " + exc.getMessage());
+                }
+                @Override
+                public void onSuccess(MobileServiceUser user) {
+                    makeToast("You are now logged in" + user.getUserId());
                 }
             });
         }
