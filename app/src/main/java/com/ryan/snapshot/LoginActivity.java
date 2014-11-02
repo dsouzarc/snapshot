@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import java.util.List;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +30,10 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceAuthenticationProvider;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceUser;
-import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.table.TableQueryCallback;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -54,23 +58,8 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         try {
-            mClient = new MobileServiceClient(
-                    "https://snapshot.azure-mobile.net/",
-                    "gzWFegbXiTLVoLkHtqvDKPzctugOGH61",
-                    this
-            );
-
-            final Item item = new Item();
-            item.Text = "Awesome item";
-            mClient.getTable(Item.class).insert(item, new TableOperationCallback<Item>() {
-                public void onCompleted(Item entity, Exception exception, ServiceFilterResponse response) {
-                    if (exception == null) {
-                        makeToast("SUCCESS");
-                    } else {
-                        makeToast("FAILED: " + exception.toString());
-                    }
-                }
-            });
+            mClient = new MobileServiceClient("https://snapshot.azure-mobile.net/",
+                    "gzWFegbXiTLVoLkHtqvDKPzctugOGH61", this);
 
             final ListenableFuture<MobileServiceUser> mLogin =
                     mClient.login(MobileServiceAuthenticationProvider.Facebook);
@@ -101,9 +90,39 @@ public class LoginActivity extends Activity {
                             if (user != null) {
                                 ((TextView) findViewById(R.id.loggedInTV)).setText("Logged in as " +
                                         user.getName());
-                            }
-                            else {
-                                makeToast("Sorry, something went wrong");
+                                final String fbID = user.getId();
+                                final User me = new User();
+                                me.facebookid = fbID;
+                                makeToast("FB ID: " + fbID);
+
+                                final MobileServiceTable<User> table = mClient.getTable(User.class);
+                                table.where().field("facebookid").eq(fbID).
+                                        execute(new TableQueryCallback<User>() {
+                                            public void onCompleted(final List<User> result, int count,
+                                                                    Exception exception, ServiceFilterResponse response) {
+                                                if (exception == null) {
+                                                    if (result.size() == 0) {
+                                                        makeToast("Not in DB");
+                                                        mClient.getTable(User.class).insert(me, new TableOperationCallback<User>() {
+                                                            public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
+                                                                if (exception == null) {
+                                                                    makeToast("Successfully inserted");
+                                                                } else {
+                                                                    makeToast("Unsuccessful insertion");
+                                                                }
+                                                            }
+                                                        });
+                                                        makeToast("In DB Now");
+                                                    }
+                                                    else {
+                                                        makeToast("Already in DB");
+                                                    }
+                                                }
+                                                else {
+                                                    makeToast("Went wrong: " + exception.getMessage());
+                                                }
+                                            }
+                                        });
                             }
                         }
                     }).executeAsync();
