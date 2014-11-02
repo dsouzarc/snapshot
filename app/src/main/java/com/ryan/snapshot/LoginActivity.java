@@ -69,7 +69,8 @@ public class LoginActivity extends Activity {
         try {
             SnapShot_API.theActivity = LoginActivity.this;
             final SnapShot_API theAPI = SnapShot_API.getApi();
-            this.mClient = SnapShot_API.getClient();
+            this.mClient = new MobileServiceClient("https://snapshot.azure-mobile.net/",
+                    "gzWFegbXiTLVoLkHtqvDKPzctugOGH61", LoginActivity.this);
 
             final ListenableFuture<MobileServiceUser> mLogin =
                     mClient.login(MobileServiceAuthenticationProvider.Facebook);
