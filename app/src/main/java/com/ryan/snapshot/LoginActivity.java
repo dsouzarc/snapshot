@@ -2,6 +2,7 @@ package com.ryan.snapshot;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.content.SharedPreferences;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -49,13 +51,21 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class LoginActivity extends Activity {
+
     private MobileServiceClient mClient;
+    private Context theC;
+    private SharedPreferences thePrefs;
+    private SharedPreferences.Editor theEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
+
+        theC = getApplicationContext();
+        thePrefs = theC.getSharedPreferences("com.ryan.snapshot", Context.MODE_PRIVATE);
+        theEditor = thePrefs.edit();
 
         try {
             mClient = new MobileServiceClient("https://snapshot.azure-mobile.net/",
@@ -93,6 +103,7 @@ public class LoginActivity extends Activity {
                                 final String fbID = user.getId();
                                 final User me = new User();
                                 me.facebookid = fbID;
+                                updateSettings(Constants.TAG_FACEBOOKID, fbID);
                                 makeToast("FB ID: " + fbID);
 
                                 final MobileServiceTable<User> table = mClient.getTable(User.class);
@@ -110,12 +121,19 @@ public class LoginActivity extends Activity {
                                                                 } else {
                                                                     makeToast("Unsuccessful insertion");
                                                                 }
+                                                                updateSettings(Constants.TAG_ID, entity.id);
                                                             }
                                                         });
                                                         makeToast("In DB Now");
                                                     }
                                                     else {
                                                         makeToast("Already in DB");
+
+                                                        for(User user : result) {
+                                                            if(user.facebookid.endsWith(me.facebookid)) {
+                                                                updateSettings(Constants.TAG_ID, user.id);
+                                                            }
+                                                        }
                                                     }
                                                 }
                                                 else {
@@ -131,6 +149,11 @@ public class LoginActivity extends Activity {
         });
         final Button login = (Button) findViewById(R.id.loginButton);
         login.setOnClickListener(loginListener);
+    }
+
+    private void updateSettings(final String tag, final String value) {
+        this.theEditor.putString(tag, value);
+        this.theEditor.commit();
     }
 
     private final View.OnClickListener loginListener = new View.OnClickListener() {

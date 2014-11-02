@@ -9,4 +9,7 @@ public class Constants {
     public static void log(final String message) {
         Log.e("com.ryan.snapshot", message);
     }
+
+    public static final String TAG_ID = "id";
+    public static final String TAG_FACEBOOKID = "facebookID";
 }
