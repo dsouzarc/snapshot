@@ -9,8 +9,81 @@
     tools:context="com.ryan.snapshot.GameDetails">
 
     <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/numberOfPlayers"
+        android:textSize="24sp"
+        android:textColor="#ff425af9"
+        android:layout_marginTop="8dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/numberOfPlayers"
+        android:id="@+id/highScore"
+        android:textSize="24sp"
+        android:textColor="#ff425af9"
+        android:layout_marginTop="24dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/highScore"
+        android:id="@+id/gameDuration"
+        android:textSize="24sp"
+        android:textColor="#ff425af9"
+        android:layout_marginTop="24dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/tableLabel"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gameDuration"
+        android:layout_marginTop="24dp"
+        android:weightSum="1"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gameDuration"
+            android:id="@+id/play"
+            android:layout_weight="0.5"
+            android:textSize="20sp"
+            android:text="Current Players"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_below="@+id/gameDuration"
+            android:id="@+id/score"
+            android:textSize="20sp"
+            android:text="Score"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_above="@+id/findAssasin"
+        android:layout_below="@+id/tableLabel">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/playersLL"
+            android:orientation="vertical"
+            android:layout_below="@+id/tableLabel"
+            android:textSize="24sp"
+            android:textColor="#ff425af9"
+            android:layout_marginTop="24dp">
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Find Assasin"
+        android:id="@+id/findAssasin"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

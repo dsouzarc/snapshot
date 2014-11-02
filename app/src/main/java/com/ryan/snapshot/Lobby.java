@@ -32,7 +32,6 @@ public class Lobby extends Activity {
     private String myID;
     private final LinkedList<Game> allGames = new LinkedList<Game>();
     private MobileServiceClient mClient;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +40,7 @@ public class Lobby extends Activity {
         this.theLayout = (LinearLayout) findViewById(R.id.theLayout);
         this.myID = getApplicationContext().getSharedPreferences("com.ryan.snapshot",
                 Context.MODE_PRIVATE).getString(Constants.TAG_ID, "");
+
 
         try {
             this.mClient = new MobileServiceClient("https://snapshot.azure-mobile.net/",

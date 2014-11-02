@@ -3,6 +3,7 @@ package com.ryan.snapshot;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import java.util.Arrays;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -90,10 +91,132 @@ public class LoginActivity extends Activity {
             makeToast(e.toString());
         }
 
+        final Button login = (Button) findViewById(R.id.loginButton);
+        login.setOnClickListener(loginListener);
+
         Session.openActiveSession(this, true, new Session.StatusCallback() {
             @Override
             public void call(Session session, SessionState state, Exception exception) {
                 if (session.isOpened()) {
+                    if(session.isPermissionGranted("user_friends")) {
+                        Request.newMeRequest(session, new Request.GraphUserCallback() {
+                            @Override
+                            public void onCompleted(GraphUser user, Response response) {
+                                if (user != null) {
+                                    ((TextView) findViewById(R.id.loggedInTV)).setText("Logged in as " +
+                                            user.getName());
+                                    final String fbID = user.getId();
+                                    final User me = new User();
+                                    me.facebookid = fbID;
+                                    updateSettings(Constants.TAG_FACEBOOKID, fbID);
+                                    makeToast("FB ID: " + fbID);
+
+                                    final MobileServiceTable<User> table = mClient.getTable(User.class);
+                                    table.where().field("facebookid").eq(fbID).
+                                            execute(new TableQueryCallback<User>() {
+                                                public void onCompleted(final List<User> result, int count,
+                                                                        Exception exception, ServiceFilterResponse response) {
+                                                    if (exception == null) {
+                                                        if (result.size() == 0) {
+                                                            makeToast("Not in DB");
+                                                            mClient.getTable(User.class).insert(me, new TableOperationCallback<User>() {
+                                                                public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
+                                                                    if (exception == null) {
+                                                                        makeToast("Successfully inserted");
+                                                                    } else {
+                                                                        makeToast("Unsuccessful insertion");
+                                                                    }
+                                                                    updateSettings(Constants.TAG_ID, entity.id);
+                                                                }
+                                                            });
+                                                            makeToast("In DB Now");
+                                                        } else {
+                                                            makeToast("Already in DB");
+
+                                                            for (User user : result) {
+                                                                if (user.facebookid.endsWith(me.facebookid)) {
+                                                                    updateSettings(Constants.TAG_ID, user.id);
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {
+                                                        makeToast("Went wrong: " + exception.getMessage());
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        }).executeAsync();
+                        return;
+                    }
+
+                    session.requestNewPublishPermissions(new Session.NewPermissionsRequest(LoginActivity.this, Arrays.asList("email", "user_birthday", "user_friends")));
+                    Session.OpenRequest request = new Session.OpenRequest(LoginActivity.this);
+                    request.setPermissions(Arrays.asList("email", "user_birthday", "user_friends"));
+                    request.setCallback(new Session.StatusCallback() {
+                        @Override
+                        public void call(Session session, SessionState state, Exception exception) {
+                            //mFacebookSession.openForRead(request);
+                            executeMeRequest(session);
+                            Request.newMeRequest(session, new Request.GraphUserCallback() {
+                                @Override
+                                public void onCompleted(GraphUser user, Response response) {
+                                    if (user != null) {
+                                        ((TextView) findViewById(R.id.loggedInTV)).setText("Logged in as " +
+                                                user.getName());
+                                        final String fbID = user.getId();
+                                        final User me = new User();
+                                        me.facebookid = fbID;
+                                        updateSettings(Constants.TAG_FACEBOOKID, fbID);
+                                        makeToast("FB ID: " + fbID);
+
+                                        final MobileServiceTable<User> table = mClient.getTable(User.class);
+                                        table.where().field("facebookid").eq(fbID).
+                                                execute(new TableQueryCallback<User>() {
+                                                    public void onCompleted(final List<User> result, int count,
+                                                                            Exception exception, ServiceFilterResponse response) {
+                                                        if (exception == null) {
+                                                            if (result.size() == 0) {
+                                                                makeToast("Not in DB");
+                                                                mClient.getTable(User.class).insert(me, new TableOperationCallback<User>() {
+                                                                    public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
+                                                                        if (exception == null) {
+                                                                            makeToast("Successfully inserted");
+                                                                        } else {
+                                                                            makeToast("Unsuccessful insertion");
+                                                                        }
+                                                                        updateSettings(Constants.TAG_ID, entity.id);
+                                                                    }
+                                                                });
+                                                                makeToast("In DB Now");
+                                                            }
+                                                            else {
+                                                                makeToast("Already in DB");
+
+                                                                for(User user : result) {
+                                                                    if(user.facebookid.endsWith(me.facebookid)) {
+                                                                        updateSettings(Constants.TAG_ID, user.id);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        else {
+                                                            makeToast("Went wrong: " + exception.getMessage());
+                                                        }
+                                                    }
+                                                });
+                                    }
+                                }
+                            }).executeAsync();
+                        }
+                    });
+
+                    Session mFacebookSession = Session.getActiveSession();
+                    if (mFacebookSession == null || mFacebookSession.isClosed())
+                    {
+                        mFacebookSession = new Session(LoginActivity.this);
+                    }
+                   // mFacebookSession.openForRead(request);
                     executeMeRequest(session);
                     Request.newMeRequest(session, new Request.GraphUserCallback() {
                         @Override
@@ -148,8 +271,7 @@ public class LoginActivity extends Activity {
                 }
             }
         });
-        final Button login = (Button) findViewById(R.id.loginButton);
-        login.setOnClickListener(loginListener);
+
     }
 
     private void updateSettings(final String tag, final String value) {
