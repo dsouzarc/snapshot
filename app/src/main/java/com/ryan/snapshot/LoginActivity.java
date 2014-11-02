@@ -74,6 +74,7 @@ public class LoginActivity extends Activity {
                 @Override
                 public void onFailure(Throwable exc) {
                     makeToast("ERROR: " + exc.getMessage());
+                    log("Error logging in: " + exc.getMessage());
                 }
                 @Override
                 public void onSuccess(MobileServiceUser user) {
