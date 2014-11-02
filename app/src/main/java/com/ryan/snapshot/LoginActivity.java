@@ -4,7 +4,24 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpConnection;
+import org.apache.http.HttpEntity;
+import android.widget.ImageView;
+import com.facebook.model.GraphObject;
+import com.facebook.HttpMethod;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.DefaultHttpClientConnection;
 import android.util.Log;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.methods.HttpGet;
+import java.net.URI;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.ClientProtocolException;
+import java.net.URISyntaxException;
 import android.view.MenuItem;
 import com.facebook.Response;
 import android.view.View;
@@ -38,6 +55,14 @@ import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceAut
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceUser;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import org.json.JSONException;
+import java.io.IOException;
+import org.apache.http.HttpConnection;
+import java.io.InputStream;
+import org.json.JSONObject;
+import com.facebook.Request;
 
 public class LoginActivity extends Activity {
 
@@ -98,6 +123,7 @@ public class LoginActivity extends Activity {
             @Override
             public void call(Session session, SessionState state, Exception exception) {
                 if (session.isOpened()) {
+                    executeMeRequest(session);
                     // make request to the /me API
                     Request.newMeRequest(session, new Request.GraphUserCallback() {
                         // callback after Graph API response with user object
@@ -165,6 +191,66 @@ public class LoginActivity extends Activity {
             startActivity(toLobby);
         }
     };
+
+    public void executeMeRequest(Session session) {
+        Bundle bundle = new Bundle();
+        bundle.putString("fields", "picture");
+        final Request request = new Request(session, "me", bundle,
+                HttpMethod.GET, new Request.Callback() {
+
+            @Override
+            public void onCompleted(Response response) {
+                GraphObject graphObject = response.getGraphObject();
+                if(graphObject != null) {
+                    try {
+                        JSONObject jsonObject = graphObject.getInnerJSONObject();
+                        JSONObject obj = jsonObject.getJSONObject("picture").getJSONObject("data");
+                        final String url = obj.getString("url");
+                        new Thread(new Runnable() {
+
+                            @Override
+                            public void run() {
+
+                                final Bitmap bitmap = BitmapFactory.decodeStream(HttpRequest(url));
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        ((ImageView) findViewById(R.id.profilePicture)).setImageBitmap(bitmap);
+                                    }
+                                });
+                            }
+                        }).start();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        Request.executeBatchAsync(request);
+    }
+
+    public static InputStream HttpRequest(String strUrl) {
+
+        HttpResponse response = null;
+        try {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpGet request = new HttpGet();
+            request.setURI(new URI(strUrl));
+            response = httpClient.execute(request);
+            HttpEntity entity = response.getEntity();
+            return entity.getContent();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private void log(final String log) {
         Log.e("com.ryan.snapshot", log);

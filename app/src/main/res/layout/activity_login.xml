@@ -51,4 +51,17 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/loginButton"/>
 
+    <com.pkmmte.view.CircularImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:gravity="center_horizontal"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sample_profile_photo"
+        android:id="@+id/profilePicture"
+        app:border_color="#EEEEEE"
+        app:border_width="4dp"
+        app:shadow="true"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
