@@ -5,6 +5,22 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import com.facebook.Response;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.widget.TextView;
+import com.facebook.model.GraphUser;
+import com.facebook.Request;
+import com.facebook.Session;
+import com.facebook.SessionState;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +54,7 @@ public class LoginActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
 
+        // start Facebook Login
         try {
             mClient = new MobileServiceClient(
                     "https://snapshot.azure-mobile.net/",
@@ -75,6 +92,29 @@ public class LoginActivity extends Activity {
         catch(Exception e) {
             makeToast(e.toString());
         }
+
+        Session.openActiveSession(this, true, new Session.StatusCallback() {
+            // callback when session changes state
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+                if (session.isOpened()) {
+                    // make request to the /me API
+                    Request.newMeRequest(session, new Request.GraphUserCallback() {
+                        // callback after Graph API response with user object
+                        @Override
+                        public void onCompleted(GraphUser user, Response response) {
+                            if (user != null) {
+                                makeToast(user.getName());
+                                log(user.getName());
+                            }
+                            else {
+                                log("ERROR");
+                            }
+                        }
+                    }).executeAsync();
+                }
+            }
+        });
 
         mSignUpButton = (Button)findViewById(R.id.signupButton);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +177,7 @@ public class LoginActivity extends Activity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override
