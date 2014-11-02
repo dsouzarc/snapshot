@@ -1,52 +1,26 @@
 package com.ryan.snapshot;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Bundle;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpConnection;
-import org.apache.http.HttpEntity;
-import android.widget.ImageView;
-import com.facebook.model.GraphObject;
-import com.facebook.HttpMethod;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.DefaultHttpClientConnection;
-import android.util.Log;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.client.methods.HttpGet;
-import java.net.URI;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import org.apache.http.client.HttpResponseException;
-import org.apache.http.client.ClientProtocolException;
-import java.net.URISyntaxException;
-import android.view.MenuItem;
-import com.facebook.Response;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.Intent;
-import android.widget.TextView;
-import com.facebook.model.GraphUser;
-import com.facebook.Request;
-import com.facebook.Session;
-import com.facebook.SessionState;
-
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphObject;
+import com.facebook.model.GraphUser;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -55,22 +29,21 @@ import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceAut
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceUser;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
-import java.io.IOException;
-import org.apache.http.HttpConnection;
-import java.io.InputStream;
 import org.json.JSONObject;
-import com.facebook.Request;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class LoginActivity extends Activity {
-
-    protected EditText mUsername;
-    protected EditText mPassword;
-    protected Button mLoginButton;
-    protected TextView mSignUpButton;
-
     private MobileServiceClient mClient;
 
     @Override
@@ -87,7 +60,7 @@ public class LoginActivity extends Activity {
                     this
             );
 
-            Item item = new Item();
+            final Item item = new Item();
             item.Text = "Awesome item";
             mClient.getTable(Item.class).insert(item, new TableOperationCallback<Item>() {
                 public void onCompleted(Item entity, Exception exception, ServiceFilterResponse response) {
@@ -101,7 +74,8 @@ public class LoginActivity extends Activity {
                 }
             });
 
-            ListenableFuture<MobileServiceUser> mLogin = mClient.login(MobileServiceAuthenticationProvider.Facebook);
+            final ListenableFuture<MobileServiceUser> mLogin =
+                    mClient.login(MobileServiceAuthenticationProvider.Facebook);
             Futures.addCallback(mLogin, new FutureCallback<MobileServiceUser>() {
                 @Override
                 public void onFailure(Throwable exc) {
@@ -119,14 +93,11 @@ public class LoginActivity extends Activity {
         }
 
         Session.openActiveSession(this, true, new Session.StatusCallback() {
-            // callback when session changes state
             @Override
             public void call(Session session, SessionState state, Exception exception) {
                 if (session.isOpened()) {
                     executeMeRequest(session);
-                    // make request to the /me API
                     Request.newMeRequest(session, new Request.GraphUserCallback() {
-                        // callback after Graph API response with user object
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
                             if (user != null) {
@@ -141,45 +112,6 @@ public class LoginActivity extends Activity {
                 }
             }
         });
-
-        mSignUpButton = (Button)findViewById(R.id.signupButton);
-        mSignUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mUsername = (EditText)findViewById(R.id.usernameField);
-        mPassword = (EditText)findViewById(R.id.passwordField);
-        mLoginButton = (Button)findViewById(R.id.loginButton);
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = mUsername.getText().toString();
-                String password = mPassword.getText().toString();
-
-                username = username.trim();
-                password = password.trim();
-
-                if (username.isEmpty() || password.isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    builder.setMessage(R.string.login_error_message)
-                            .setTitle(R.string.login_error_title)
-                            .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-                else {
-                    // Login
-                    setProgressBarIndeterminateVisibility(true);
-
-
-                }
-            }
-        });
-
         final Button login = (Button) findViewById(R.id.loginButton);
         login.setOnClickListener(loginListener);
     }
@@ -193,27 +125,28 @@ public class LoginActivity extends Activity {
     };
 
     public void executeMeRequest(Session session) {
-        Bundle bundle = new Bundle();
+        final Bundle bundle = new Bundle();
+        bundle.putBoolean("redirect", false);
+        bundle.putString("height", "600");
+        bundle.putString("type", "normal");
+        bundle.putString("width", "600");
         bundle.putString("fields", "picture");
-        final Request request = new Request(session, "me", bundle,
+        final Request request = new Request(session, "/me/picture", bundle,
                 HttpMethod.GET, new Request.Callback() {
-
             @Override
             public void onCompleted(Response response) {
-                GraphObject graphObject = response.getGraphObject();
+                final GraphObject graphObject = response.getGraphObject();
                 if(graphObject != null) {
                     try {
-                        JSONObject jsonObject = graphObject.getInnerJSONObject();
-                        JSONObject obj = jsonObject.getJSONObject("picture").getJSONObject("data");
+                        final JSONObject jsonObject = graphObject.getInnerJSONObject();
+                        final JSONObject obj = jsonObject.getJSONObject("picture").getJSONObject("data");
                         final String url = obj.getString("url");
                         new Thread(new Runnable() {
-
                             @Override
                             public void run() {
 
                                 final Bitmap bitmap = BitmapFactory.decodeStream(HttpRequest(url));
                                 runOnUiThread(new Runnable() {
-
                                     @Override
                                     public void run() {
                                         ((ImageView) findViewById(R.id.profilePicture)).setImageBitmap(bitmap);
@@ -230,15 +163,14 @@ public class LoginActivity extends Activity {
         Request.executeBatchAsync(request);
     }
 
-    public static InputStream HttpRequest(String strUrl) {
-
+    public static InputStream HttpRequest(final String strUrl) {
         HttpResponse response = null;
         try {
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpGet request = new HttpGet();
+            final DefaultHttpClient httpClient = new DefaultHttpClient();
+            final HttpGet request = new HttpGet();
             request.setURI(new URI(strUrl));
             response = httpClient.execute(request);
-            HttpEntity entity = response.getEntity();
+            final HttpEntity entity = response.getEntity();
             return entity.getContent();
         } catch (ClientProtocolException e) {
             e.printStackTrace();

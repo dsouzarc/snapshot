@@ -8,53 +8,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".LoginScreen">
 
-    <EditText
-        android:id="@+id/usernameField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:hint="@string/username_hint" >
-        <requestFocus />
-    </EditText>
-
-    <EditText
-        android:id="@+id/passwordField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/usernameField"
-        android:layout_below="@+id/usernameField"
-        android:ems="10"
-        android:hint="@string/password_hint"
-        android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/realLoginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/passwordField"
-        android:layout_below="@+id/passwordField"
-        android:text="@string/login_button_label" />
-
-    <Button
-        android:id="@+id/signupButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/realLoginButton"
-        android:text="signup" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/loginButton"/>
-
     <com.pkmmte.view.CircularImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
         android:gravity="center_horizontal"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
@@ -63,5 +20,12 @@
         app:border_color="#EEEEEE"
         app:border_width="4dp"
         app:shadow="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentTop="true"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/loginButton"/>
 </RelativeLayout>
