@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.HttpMethod;
@@ -52,7 +53,6 @@ public class LoginActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
 
-        // start Facebook Login
         try {
             mClient = new MobileServiceClient(
                     "https://snapshot.azure-mobile.net/",
@@ -66,10 +66,8 @@ public class LoginActivity extends Activity {
                 public void onCompleted(Item entity, Exception exception, ServiceFilterResponse response) {
                     if (exception == null) {
                         makeToast("SUCCESS");
-                        // Insert succeeded
                     } else {
                         makeToast("FAILED: " + exception.toString());
-                        // Insert failed
                     }
                 }
             });
@@ -101,11 +99,10 @@ public class LoginActivity extends Activity {
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
                             if (user != null) {
-                                makeToast(user.getName());
-                                log(user.getName());
+                                ((TextView) findViewById(R.id.loggedInTV)).setText(user.getName());
                             }
                             else {
-                                log("ERROR");
+                                makeToast("Sorry, something went wrong");
                             }
                         }
                     }).executeAsync();
@@ -131,25 +128,29 @@ public class LoginActivity extends Activity {
         bundle.putString("type", "normal");
         bundle.putString("width", "600");
         bundle.putString("fields", "picture");
-        final Request request = new Request(session, "/me/picture", bundle,
-                HttpMethod.GET, new Request.Callback() {
+
+        final Request request = new Request(session, "/me/picture", bundle, HttpMethod.GET,
+                new Request.Callback() {
             @Override
             public void onCompleted(Response response) {
                 final GraphObject graphObject = response.getGraphObject();
+
                 if(graphObject != null) {
                     try {
                         final JSONObject jsonObject = graphObject.getInnerJSONObject();
-                        final JSONObject obj = jsonObject.getJSONObject("picture").getJSONObject("data");
+                        final JSONObject obj =
+                                jsonObject.getJSONObject("picture").getJSONObject("data");
                         final String url = obj.getString("url");
+
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-
                                 final Bitmap bitmap = BitmapFactory.decodeStream(HttpRequest(url));
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ((ImageView) findViewById(R.id.profilePicture)).setImageBitmap(bitmap);
+                                        ((ImageView) findViewById(R.id.profilePicture))
+                                                .setImageBitmap(bitmap);
                                     }
                                 });
                             }
@@ -164,21 +165,24 @@ public class LoginActivity extends Activity {
     }
 
     public static InputStream HttpRequest(final String strUrl) {
-        HttpResponse response = null;
         try {
             final DefaultHttpClient httpClient = new DefaultHttpClient();
             final HttpGet request = new HttpGet();
             request.setURI(new URI(strUrl));
-            response = httpClient.execute(request);
+            final HttpResponse response = httpClient.execute(request);
             final HttpEntity entity = response.getEntity();
             return entity.getContent();
-        } catch (ClientProtocolException e) {
+        }
+        catch (ClientProtocolException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
-        } catch (URISyntaxException e) {
+        }
+        catch (URISyntaxException e) {
             e.printStackTrace();
-        } catch (NullPointerException e) {
+        }
+        catch (NullPointerException e) {
             e.printStackTrace();
         }
         return null;
@@ -200,16 +204,12 @@ public class LoginActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.login_screen, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
