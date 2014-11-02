@@ -99,7 +99,8 @@ public class LoginActivity extends Activity {
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
                             if (user != null) {
-                                ((TextView) findViewById(R.id.loggedInTV)).setText(user.getName());
+                                ((TextView) findViewById(R.id.loggedInTV)).setText("Logged in as " +
+                                        user.getName());
                             }
                             else {
                                 makeToast("Sorry, something went wrong");
